@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LevelUp Store - Tu tienda de videojuegos digitales</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ESTILOS EXISTENTES (se mantienen igual) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #897dec;
+            --secondary: #fd79a8;
+            --secondary-light: #ff9ac0;
+            --accent: #00cec9;
+            --accent-light: #55efc4;
+            --dark: #0f1419;
+            --darker: #1a1f2e;
+            --dark-light: #252b3a;
+            --text: #e0e0e0;
+            --text-light: #a0a0a0;
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--primary-light) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--darker) 0%, var(--dark-light) 100%);
+            
+            /* Colores modo claro */
+            --bg-light: #f5f7fa;
+            --card-light: #ffffff;
+            --text-dark: #2d3436;
+            --text-light-mode: #636e72;
+            --border-light: #e0e6ed;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body.light-mode {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s;
+        }
+        
+        button {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background: var(--gradient-dark);
+            padding: 15px 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+        
+        body.light-mode header {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        body.light-mode .logo {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo span {
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.light-mode .logo span {
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .search-bar {
+            display: flex;
+            flex: 1;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px 0 0 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .search-bar input {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--text-dark);
+            border: 1px solid var(--border-light);
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.3);
+        }
+        
+        .search-bar button {
+            padding: 12px 20px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 0 8px 8px 0;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+        }
+        
+        .search-bar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(108, 92, 231, 0.4);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-actions a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.light-mode .user-actions a {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--border-light);
+            color: var(--text-dark);
+        }
+        
+        .user-actions a:hover {
+            background: rgba(108, 92, 231, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        body.light-mode .user-actions a:hover {
+            background: rgba(108, 92, 231, 0.1);
+        }
+        
+        /* Interruptor modo claro/oscuro */
+        .theme-switch {
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        
+        .theme-switch input {
+            display: none;
+        }
+        
+        .slider {
+            width: 50px;
+            height: 24px;
+            background-color: var(--darker);
+            border-radius: 24px;
+            position: relative;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        
+        body.light-mode .slider {
+            background-color: var(--border-light);
+        }
+        
+        .slider:before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .theme-icon {
+            font-size: 18px;
+        }
+        
+        /* Navegación principal */
+        nav {
+            background: var(--gradient-dark);
+            padding: 12px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s;
+        }
+        
+        body.light-mode nav {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+        }
+        
+        .nav-menu li {
+            position: relative;
+        }
+        
+        .nav-menu a {
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: block;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        body.light-mode .nav-menu a {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-dark);
+        }
+        
+        .nav-menu a:hover {
+            background: var(--gradient-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+        }
+        
+        body.light-mode .nav-menu a:hover {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--gradient-dark);
+            min-width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        body.light-mode .dropdown {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-menu li:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown a {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: transparent;
+        }
+        
+        body.light-mode .dropdown a {
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-dark);
+        }
+        
+        .dropdown a:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown a:hover {
+            background: var(--gradient-primary);
+        }
+        
+        body.light-mode .dropdown a:hover {
+            color: white;
+        }
+        
+        /* Banner principal */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 0;
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body.light-mode .hero {
+            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        body.light-mode .hero h1 {
+            color: var(--text-dark);
+            text-shadow: none;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        body.light-mode .hero p {
+            color: var(--text-dark);
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--gradient-secondary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 15px rgba(253, 121, 168, 0.4);
+            font-size: 18px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(253, 121, 168, 0.5);
+        }
+        
+        /* Sección de juegos */
+        .featured-games {
+            margin-bottom: 60px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        body.light-mode .section-title {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+        
+        .view-all {
+            color: var(--primary-light);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .view-all {
+            color: var(--primary);
+        }
+        
+        .view-all:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .game-card {
+            background: var(--gradient-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        body.light-mode .game-card {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        body.light-mode .game-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .game-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .game-card:hover .game-image {
+            transform: scale(1.05);
+        }
+        
+        .game-info {
+            padding: 20px;
+        }
+        
+        .game-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 600;
+        }
+        
+        body.light-mode .game-title {
+            color: var(--text-dark);
+        }
+        
+        .game-platforms {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .platform {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+        
+        body.light-mode .platform {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+        
+        .game-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .price {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .original-price {
+            font-size: 14px;
+            text-decoration: line-through;
+            color: var(--text-light);
+            margin-right: 5px;
+        }
+        
+        body.light-mode .original-price {
+            color: var(--text-light-mode);
+        }
+        
+        .discount {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        
+        .add-to-cart {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+        }
+        
+        .add-to-cart:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(253, 121, 168, 0.4);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--gradient-dark);
+            padding: 50px 0 20px;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.3s;
+        }
+        
+        body.light-mode footer {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%);
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--accent);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        body.light-mode .footer-column h3 {
+            color: var(--primary);
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            transition: all 0.3s;
+            display: block;
+            padding: 5px 0;
+        }
+        
+        body.light-mode .footer-column ul li a {
+            color: var(--text-dark);
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .social-icons a {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+        
+        .social-icons a:hover {
+            background: var(--gradient-primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        body.light-mode .copyright {
+            border-top: 1px solid var(--border-light);
+            color: var(--text-light-mode);
+        }
+        
+        /* Páginas específicas */
+        .page-content {
+            padding: 40px 0;
+            min-height: 60vh;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.light-mode .page-title {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        body.light-mode .breadcrumb {
+            color: var(--text-light-mode);
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--accent);
+        }
+        
+        .filter-bar {
+            background: var(--gradient-dark);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.light-mode .filter-bar {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        body.light-mode .filter-label {
+            color: var(--primary);
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 14px;
+        }
+        
+        body.light-mode .filter-select {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--border-light);
+            color: var(--text-dark);
+        }
+        
+        /* Nuevos elementos para la página principal */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .category-card {
+            background: var(--gradient-dark);
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 150px;
+        }
+        
+        body.light-mode .category-card {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: var(--gradient-primary);
+        }
+        
+        .category-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .category-card:hover .category-icon {
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        body.light-mode .category-name {
+            color: var(--text-dark);
+        }
+        
+        .category-card:hover .category-name {
+            color: white;
+        }
+        
+        .promo-banner {
+            background: var(--gradient-secondary);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .promo-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .promo-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .promo-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .promo-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .promo-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--darker);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .promo-button:hover {
+            background: var(--dark);
+            transform: translateY(-3px);
+        }
+        
+        /* Organización adicional */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .stat-card {
+            background: var(--gradient-dark);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.light-mode .stat-card {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .stat-text {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+        
+        body.light-mode .stat-text {
+            color: var(--text-light-mode);
+        }
+        
+        /* NUEVOS ESTILOS PARA EL CHECKOUT MEJORADO */
+        .checkout-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            padding: 0 20px;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 10px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .step-number {
+            background: var(--card-light);
+            border: 3px solid var(--border-light);
+        }
+        
+        .step.active .step-number {
+            background: var(--gradient-primary);
+            border-color: var(--primary-light);
+            color: white;
+        }
+        
+        .step-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .step-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-dark);
+            z-index: 1;
+        }
+        
+        body.light-mode .step-line {
+            background: var(--border-light);
+        }
+        
+        .step-line-progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .checkout-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .checkout-section.active {
+            display: block;
+        }
+        
+        .checkout-form {
+            background: var(--gradient-dark);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        body.light-mode .checkout-form {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        body.light-mode .form-label {
+            color: var(--primary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .form-input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--border-light);
+            color: var(--text-dark);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.3);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .payment-method {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        body.light-mode .payment-method {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--border-light);
+        }
+        
+        .payment-method:hover, .payment-method.selected {
+            border-color: var(--primary-light);
+            background: rgba(108, 92, 231, 0.1);
+        }
+        
+        .payment-method i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: var(--primary-light);
+        }
+        
+        .order-summary {
+            background: var(--gradient-dark);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        body.light-mode .order-summary {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.light-mode .order-item {
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.light-mode .order-total {
+            border-top: 2px solid var(--border-light);
+        }
+        
+        .checkout-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        body.light-mode .btn-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-dark);
+            border: 1px solid var(--border-light);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 92, 231, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(108, 92, 231, 0.4);
+        }
+        
+        .btn-success {
+            background: var(--gradient-accent);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 206, 201, 0.3);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 206, 201, 0.4);
+        }
+        
+        .confirmation-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .confirmation-icon {
+            font-size: 80px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .confirmation-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+        
+        .confirmation-details {
+            background: var(--gradient-dark);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        body.light-mode .confirmation-details {
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+        }
+        
+        .confirmation-details h3 {
+            margin-bottom: 15px;
+            color: var(--primary-light);
+        }
+        
+        .confirmation-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.light-mode .confirmation-item {
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .confirmation-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                max-width: 100%;
+                margin: 10px 0;
+                order: 3;
+                width: 100%;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .categories {
+                gap: 15px;
+            }
+            
+            .category-card {
+                min-width: 120px;
+                padding: 15px 20px;
+            }
+            
+            .checkout-steps {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .step {
+                flex-direction: row;
+                width: 100%;
+            }
+            
+            .step-number {
+                margin-right: 15px;
+                margin-bottom: 0;
+            }
+            
+            .step-line {
+                display: none;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkout-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        /* Estados de página */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo" onclick="showPage('home')">Level<span>Up</span> Store</a>
+            
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar juegos...">
+                <button><i class="fas fa-search"></i> Buscar</button>
+            </div>
+            
+            <div class="user-actions">
+                <a href="#" onclick="showPage('login')">
+                    <i class="fas fa-user"></i>
+                    Iniciar Sesión
+                </a>
+                <a href="#" onclick="showPage('cart')">
+                    <i class="fas fa-shopping-cart"></i>
+                    Carrito (<span id="cart-count">0</span>)
+                </a>
+                <div class="theme-switch">
+                    <i class="fas fa-sun theme-icon"></i>
+                    <label>
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <i class="fas fa-moon theme-icon"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navegación principal -->
+    <nav>
+        <div class="container">
+            <ul class="nav-menu">
+                <li><a href="#" onclick="showPage('home')">Inicio</a></li>
+                <li>
+                    <a href="#" onclick="showPage('games')">Juegos</a>
+                    <div class="dropdown">
+                        <a href="#" onclick="filterByPlatform('pc')">PC</a>
+                        <a href="#" onclick="filterByPlatform('ps5')">PlayStation 5</a>
+                        <a href="#" onclick="filterByPlatform('xbox')">Xbox Series X</a>
+                        <a href="#" onclick="filterByPlatform('nintendo')">Nintendo Switch</a>
+                    </div>
+                </li>
+                <li><a href="#" onclick="showPage('deals')">Ofertas</a></li>
+                <li><a href="#" onclick="showPage('new')">Novedades</a></li>
+                <li><a href="#" onclick="showPage('top')">Top Ventas</a></li>
+                <li><a href="#" onclick="showPage('support')">Soporte</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Página de Inicio -->
+    <section id="home" class="page active">
+        <!-- Banner principal -->
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Los mejores juegos digitales al mejor precio</h1>
+                <p>Descubre ofertas exclusivas en miles de juegos para PC, PlayStation, Xbox y Nintendo Switch. Entrega instantánea y soporte 24/7.</p>
+                <a href="#" class="cta-button" onclick="showPage('deals')">Ver Ofertas Especiales</a>
+            </div>
+        </section>
+        
+        <!-- Contenido principal -->
+        <main class="container">
+            <!-- Estadísticas -->
+            <section class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-text">Juegos Disponibles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500,000+</div>
+                    <div class="stat-text">Clientes Satisfechos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-text">Soporte al Cliente</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-text">Descuentos Exclusivos</div>
+                </div>
+            </section>
+            
+            <!-- Categorías -->
+            <section class="categories">
+                <div class="category-card" onclick="filterByPlatform('pc')">
+                    <div class="category-icon"><i class="fas fa-desktop"></i></div>
+                    <div class="category-name">PC</div>
+                </div>
+                <div class="category-card" onclick="filterByPlatform('ps5')">
+                    <div class="category-icon"><i class="fab fa-playstation"></i></div>
+                    <div class="category-name">PlayStation</div>
+                </div>
+                <div class="category-card" onclick="filterByPlatform('xbox')">
+                    <div class="category-icon"><i class="fab fa-xbox"></i></div>
+                    <div class="category-name">Xbox</div>
+                </div>
+                <div class="category-card" onclick="filterByPlatform('nintendo')">
+                    <div class="category-icon"><i class="fas fa-gamepad"></i></div>
+                    <div class="category-name">Nintendo</div>
+                </div>
+            </section>
+            
+            <!-- Banner promocional -->
+            <section class="promo-banner">
+                <div class="promo-content">
+                    <div class="promo-title">¡Oferta de Verano!</div>
+                    <div class="promo-text">Hasta 70% de descuento en juegos seleccionados. Oferta válida hasta agotar existencias.</div>
+                    <a href="#" class="promo-button" onclick="showPage('deals')">Ver Ofertas</a>
+                </div>
+            </section>
+            
+            <!-- Juegos destacados -->
+            <section class="featured-games">
+                <div class="section-header">
+                    <h2 class="section-title">Juegos Destacados</h2>
+                    <a href="#" class="view-all" onclick="showPage('games')">Ver todos <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="games-grid" id="featured-games">
+                    <!-- Los juegos se cargarán aquí con JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Ofertas especiales -->
+            <section class="featured-games">
+                <div class="section-header">
+                    <h2 class="section-title">Ofertas Especiales</h2>
+                    <a href="#" class="view-all" onclick="showPage('deals')">Ver todas <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="games-grid" id="deal-games">
+                    <!-- Las ofertas se cargarán aquí con JavaScript -->
+                </div>
+            </section>
+            
+            <!-- Novedades -->
+            <section class="featured-games">
+                <div class="section-header">
+                    <h2 class="section-title">Últimos Lanzamientos</h2>
+                    <a href="#" class="view-all" onclick="showPage('new')">Ver todos <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="games-grid" id="new-games">
+                    <!-- Las novedades se cargarán aquí con JavaScript -->
+                </div>
+            </section>
+        </main>
+    </section>
+    
+    <!-- Otras páginas -->
+    <!-- Página de Juegos -->
+    <section id="games" class="page">
+        <div class="container page-content">
+            <div class="breadcrumb">
+                <a href="#" onclick="showPage('home')">Inicio</a> > <span>Juegos</span>
+            </div>
+            <h1 class="page-title">Todos los Juegos</h1>
+            
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <span class="filter-label">Plataforma:</span>
+                    <select class="filter-select" id="platform-filter" onchange="filterGames()">
+                        <option value="all">Todas</option>
+                        <option value="pc">PC</option>
+                        <option value="ps5">PlayStation 5</option>
+                        <option value="xbox">Xbox Series X</option>
+                        <option value="nintendo">Nintendo Switch</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Ordenar por:</span>
+                    <select class="filter-select" id="sort-filter" onchange="sortGames()">
+                        <option value="name">Nombre</option>
+                        <option value="price-low">Precio: Menor a Mayor</option>
+                        <option value="price-high">Precio: Mayor a Menor</option>
+                        <option value="discount">Mayor Descuento</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="games-grid" id="all-games">
+                <!-- Todos los juegos se cargarán aquí con JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Página de Ofertas -->
+    <section id="deals" class="page">
+        <div class="container page-content">
+            <div class="breadcrumb">
+                <a href="#" onclick="showPage('home')">Inicio</a> > <span>Ofertas</span>
+            </div>
+            <h1 class="page-title">Ofertas Especiales</h1>
+            
+            <div class="games-grid" id="deals-page-games">
+                <!-- Las ofertas se cargarán aquí con JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Página de Novedades -->
+    <section id="new" class="page">
+        <div class="container page-content">
+            <div class="breadcrumb">
+                <a href="#" onclick="showPage('home')">Inicio</a> > <span>Novedades</span>
+            </div>
+            <h1 class="page-title">Últimos Lanzamientos</h1>
+            
+            <div class="games-grid" id="new-page-games">
+                <!-- Las novedades se cargarán aquí con JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Página de Carrito MEJORADA -->
+    <section id="cart" class="page">
+        <div class="container page-content">
+            <div class="breadcrumb">
+                <a href="#" onclick="showPage('home')">Inicio</a> > <span>Carrito</span>
+            </div>
+            <h1 class="page-title">Tu Carrito de Compras</h1>
+            
+            <div class="cart-content" id="cart-content">
+                <!-- El contenido del carrito se carga aquí con JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Página de Login -->
+    <section id="login" class="page">
+        <div class="container page-content">
+            <div class="breadcrumb">
+                <a href="#" onclick="showPage('home')">Inicio</a> > <span>Iniciar Sesión</span>
+            </div>
+            
+            <div class="login-form">
+                <h1 class="page-title" style="text-align: center;">Iniciar Sesión</h1>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">Correo Electrónico</label>
+                    <input type="email" id="email" class="form-input" placeholder="tu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Contraseña</label>
+                    <input type="password" id="password" class="form-input" placeholder="Tu contraseña">
+                </div>
+                
+                <button class="login-button" onclick="login()">Iniciar Sesión</button>
+                
+                <div class="form-links">
+                    <a href="#">¿Olvidaste tu contraseña?</a> <br>
+                    <span>¿No tienes cuenta? <a href="#">Regístrate aquí</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Página de Soporte -->
+    <section id="support" class="page">
+        <div class="container page-content">
+            <div class="breadcrumb">
+                <a href="#" onclick="showPage('home')">Inicio</a> > <span>Soporte</span>
+            </div>
+            <h1 class="page-title">Centro de Soporte</h1>
+            
+            <div style="background: var(--gradient-dark); padding: 30px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                <h2 style="margin-bottom: 20px; color: var(--accent);">¿Necesitas ayuda?</h2>
+                <p style="margin-bottom: 20px;">Estamos aquí para ayudarte con cualquier problema o pregunta que tengas.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-question-circle"></i> Preguntas Frecuentes</h3>
+                        <p>Encuentra respuestas a las preguntas más comunes sobre compras, descargas y más.</p>
+                    </div>
+                    
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-envelope"></i> Contacto</h3>
+                        <p>¿No encuentras lo que buscas? Contáctanos directamente.</p>
+                    </div>
+                    
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;"><i class="fas fa-comments"></i> Chat en Vivo</h3>
+                        <p>Habla con nuestro equipo de soporte en tiempo real.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>LevelUp Store</h3>
+                    <ul>
+                        <li><a href="#">Sobre Nosotros</a></li>
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#">Trabaja con Nosotros</a></li>
+                        <li><a href="#">Prensa</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Información</h3>
+                    <ul>
+                        <li><a href="#">Preguntas Frecuentes</a></li>
+                        <li><a href="#">Cómo Comprar</a></li>
+                        <li><a href="#">Métodos de Pago</a></li>
+                        <li><a href="#">Seguridad</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Términos y Condiciones</a></li>
+                        <li><a href="#">Política de Privacidad</a></li>
+                        <li><a href="#">Política de Cookies</a></li>
+                        <li><a href="#">Política de Reembolsos</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Síguenos</h3>
+                    <ul>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+                    </ul>
+                    
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 LevelUp Store. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Datos de juegos
+        const games = [
+            {
+                id: 1,
+                title: "Elden Ring",
+                price: 49.99,
+                originalPrice: 59.99,
+                discount: 20,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4qbe.png",
+                platforms: ["pc", "ps5", "xbox"],
+                isNew: false,
+                isTop: true
+            },
+            {
+                id: 2,
+                title: "Cyberpunk 2077",
+                price: 29.99,
+                originalPrice: 49.99,
+                discount: 40,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2d2q.png",
+                platforms: ["pc", "ps5", "xbox"],
+                isNew: false,
+                isTop: true
+            },
+            {
+                id: 3,
+                title: "Hogwarts Legacy",
+                price: 54.99,
+                originalPrice: 59.99,
+                discount: 15,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5xuu.png",
+                platforms: ["pc", "ps5", "xbox", "nintendo"],
+                isNew: true,
+                isTop: true
+            },
+            {
+                id: 4,
+                title: "Call of Duty: Modern Warfare 3",
+                price: 59.99,
+                originalPrice: 69.99,
+                discount: 10,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co6wxo.png",
+                platforms: ["pc", "ps5", "xbox"],
+                isNew: true,
+                isTop: false
+            },
+            {
+                id: 5,
+                title: "Baldur's Gate 3",
+                price: 49.99,
+                originalPrice: 59.99,
+                discount: 25,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4qo6.png",
+                platforms: ["pc", "ps5"],
+                isNew: false,
+                isTop: true
+            },
+            {
+                id: 6,
+                title: "Marvel's Spider-Man 2",
+                price: 64.99,
+                originalPrice: 69.99,
+                discount: 12,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co6hx4.png",
+                platforms: ["ps5"],
+                isNew: true,
+                isTop: true
+            },
+            {
+                id: 7,
+                title: "Starfield",
+                price: 44.99,
+                originalPrice: 69.99,
+                discount: 35,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5xw3.png",
+                platforms: ["pc", "xbox"],
+                isNew: false,
+                isTop: false
+            },
+            {
+                id: 8,
+                title: "Diablo IV",
+                price: 39.99,
+                originalPrice: 69.99,
+                discount: 45,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5x8p.png",
+                platforms: ["pc", "ps5", "xbox"],
+                isNew: false,
+                isTop: false
+            },
+            {
+                id: 9,
+                title: "The Legend of Zelda: Tears of the Kingdom",
+                price: 54.99,
+                originalPrice: 59.99,
+                discount: 10,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co6hww.png",
+                platforms: ["nintendo"],
+                isNew: true,
+                isTop: true
+            },
+            {
+                id: 10,
+                title: "Resident Evil 4 Remake",
+                price: 34.99,
+                originalPrice: 59.99,
+                discount: 50,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co6b2y.png",
+                platforms: ["pc", "ps5", "xbox"],
+                isNew: false,
+                isTop: false
+            },
+            {
+                id: 11,
+                title: "Final Fantasy XVI",
+                price: 49.99,
+                originalPrice: 69.99,
+                discount: 30,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5xut.png",
+                platforms: ["ps5"],
+                isNew: true,
+                isTop: true
+            },
+            {
+                id: 12,
+                title: "Super Mario Bros. Wonder",
+                price: 49.99,
+                originalPrice: 54.99,
+                discount: 10,
+                image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co6hwy.png",
+                platforms: ["nintendo"],
+                isNew: true,
+                isTop: false
+            }
+        ];
+
+        // Carrito de compras
+        let cart = [];
+        
+        // Proceso de checkout
+        let currentStep = 1;
+        let selectedPaymentMethod = '';
+        
+        // Modo claro/oscuro
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        // Verificar preferencia del usuario
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            themeToggle.checked = true;
+        }
+        
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
+        // Mostrar página específica
+        function showPage(pageId) {
+            // Si estamos saliendo de la página del carrito, resetear el checkout
+            if (pageId !== 'cart') {
+                currentStep = 1;
+                selectedPaymentMethod = '';
+            }
+            
+            // Ocultar todas las páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostrar la página seleccionada
+            document.getElementById(pageId).classList.add('active');
+            
+            // Actualizar contenido según la página
+            switch(pageId) {
+                case 'home':
+                    loadFeaturedGames();
+                    loadDealGames();
+                    loadNewGames();
+                    break;
+                case 'games':
+                    loadAllGames();
+                    break;
+                case 'deals':
+                    loadDealsPage();
+                    break;
+                case 'new':
+                    loadNewPage();
+                    break;
+                case 'cart':
+                    loadCart();
+                    break;
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Cargar juegos destacados en la página de inicio
+        function loadFeaturedGames() {
+            const featuredContainer = document.getElementById('featured-games');
+            const featuredGames = games.filter(game => game.isTop).slice(0, 6);
+            
+            featuredContainer.innerHTML = featuredGames.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            ${game.discount > 0 ? `<span class="discount">-${game.discount}%</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Cargar ofertas en la página de inicio
+        function loadDealGames() {
+            const dealsContainer = document.getElementById('deal-games');
+            const dealGames = games.filter(game => game.discount >= 30).slice(0, 4);
+            
+            dealsContainer.innerHTML = dealGames.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            <span class="discount">-${game.discount}%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Cargar novedades en la página de inicio
+        function loadNewGames() {
+            const newContainer = document.getElementById('new-games');
+            const newGames = games.filter(game => game.isNew).slice(0, 4);
+            
+            newContainer.innerHTML = newGames.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            ${game.discount > 0 ? `<span class="discount">-${game.discount}%</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Cargar todos los juegos en la página de juegos
+        function loadAllGames() {
+            const allGamesContainer = document.getElementById('all-games');
+            
+            allGamesContainer.innerHTML = games.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            ${game.discount > 0 ? `<span class="original-price">€${game.originalPrice.toFixed(2)}</span>` : ''}
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            ${game.discount > 0 ? `<span class="discount">-${game.discount}%</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Cargar ofertas en la página de ofertas
+        function loadDealsPage() {
+            const dealsPageContainer = document.getElementById('deals-page-games');
+            const dealGames = games.filter(game => game.discount > 0).sort((a, b) => b.discount - a.discount);
+            
+            dealsPageContainer.innerHTML = dealGames.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            <span class="original-price">€${game.originalPrice.toFixed(2)}</span>
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            <span class="discount">-${game.discount}%</span>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Cargar novedades en la página de novedades
+        function loadNewPage() {
+            const newPageContainer = document.getElementById('new-page-games');
+            const newGames = games.filter(game => game.isNew);
+            
+            newPageContainer.innerHTML = newGames.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            ${game.discount > 0 ? `<span class="original-price">€${game.originalPrice.toFixed(2)}</span>` : ''}
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            ${game.discount > 0 ? `<span class="discount">-${game.discount}%</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Filtrar juegos por plataforma
+        function filterByPlatform(platform) {
+            showPage('games');
+            document.getElementById('platform-filter').value = platform;
+            filterGames();
+        }
+        
+        // Filtrar juegos
+        function filterGames() {
+            const platform = document.getElementById('platform-filter').value;
+            const allGamesContainer = document.getElementById('all-games');
+            
+            let filteredGames = games;
+            
+            if (platform !== 'all') {
+                filteredGames = games.filter(game => game.platforms.includes(platform));
+            }
+            
+            allGamesContainer.innerHTML = filteredGames.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            ${game.discount > 0 ? `<span class="original-price">€${game.originalPrice.toFixed(2)}</span>` : ''}
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            ${game.discount > 0 ? `<span class="discount">-${game.discount}%</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Ordenar juegos
+        function sortGames() {
+            const sortBy = document.getElementById('sort-filter').value;
+            const platform = document.getElementById('platform-filter').value;
+            
+            let sortedGames = games;
+            
+            if (platform !== 'all') {
+                sortedGames = games.filter(game => game.platforms.includes(platform));
+            }
+            
+            switch(sortBy) {
+                case 'name':
+                    sortedGames.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case 'price-low':
+                    sortedGames.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    sortedGames.sort((a, b) => b.price - a.price);
+                    break;
+                case 'discount':
+                    sortedGames.sort((a, b) => b.discount - a.discount);
+                    break;
+            }
+            
+            const allGamesContainer = document.getElementById('all-games');
+            allGamesContainer.innerHTML = sortedGames.map(game => `
+                <div class="game-card">
+                    <img src="${game.image}" alt="${game.title}" class="game-image">
+                    <div class="game-info">
+                        <h3 class="game-title">${game.title}</h3>
+                        <div class="game-platforms">
+                            ${game.platforms.map(platform => `<span class="platform">${platform.toUpperCase()}</span>`).join('')}
+                        </div>
+                        <div class="game-price">
+                            ${game.discount > 0 ? `<span class="original-price">€${game.originalPrice.toFixed(2)}</span>` : ''}
+                            <span class="price">€${game.price.toFixed(2)}</span>
+                            ${game.discount > 0 ? `<span class="discount">-${game.discount}%</span>` : ''}
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart(${game.id})">Añadir al Carrito</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Añadir juego al carrito
+        function addToCart(gameId) {
+            const game = games.find(g => g.id === gameId);
+            const existingItem = cart.find(item => item.id === gameId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: game.id,
+                    title: game.title,
+                    price: game.price,
+                    image: game.image,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            
+            // Mostrar notificación
+            alert(`${game.title} ha sido añadido al carrito`);
+        }
+        
+        // Actualizar contador del carrito
+        function updateCartCount() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+        
+        // Cargar carrito MEJORADO
+        function loadCart() {
+            const cartContent = document.getElementById('cart-content');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px;">
+                        <i class="fas fa-shopping-cart" style="font-size: 80px; color: var(--text-light); margin-bottom: 20px;"></i>
+                        <h2 style="margin-bottom: 15px; color: var(--text-light);">Tu carrito está vacío</h2>
+                        <p style="margin-bottom: 30px; color: var(--text-light);">Explora nuestros juegos y añade algunos a tu carrito</p>
+                        <button class="btn btn-primary" onclick="showPage('games')">Ir a la Tienda</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Mostrar proceso de checkout si hay items en el carrito
+            cartContent.innerHTML = `
+                <div class="checkout-steps">
+                    <div class="step ${currentStep >= 1 ? 'active' : ''}">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Resumen</div>
+                    </div>
+                    <div class="step ${currentStep >= 2 ? 'active' : ''}">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Información</div>
+                    </div>
+                    <div class="step ${currentStep >= 3 ? 'active' : ''}">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Pago</div>
+                    </div>
+                    <div class="step ${currentStep >= 4 ? 'active' : ''}">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Confirmación</div>
+                    </div>
+                    <div class="step-line">
+                        <div class="step-line-progress" style="width: ${(currentStep - 1) * 33.33}%"></div>
+                    </div>
+                </div>
+                
+                <!-- Paso 1: Resumen del carrito -->
+                <div class="checkout-section ${currentStep === 1 ? 'active' : ''}" id="step1">
+                    <div class="order-summary">
+                        <h3 style="margin-bottom: 20px;">Resumen de tu pedido</h3>
+                        ${cart.map(item => `
+                            <div class="order-item">
+                                <div>
+                                    <div style="font-weight: 600;">${item.title}</div>
+                                    <div style="font-size: 14px; color: var(--text-light);">Cantidad: ${item.quantity}</div>
+                                </div>
+                                <div style="font-weight: 600;">€${(item.price * item.quantity).toFixed(2)}</div>
+                            </div>
+                        `).join('')}
+                        <div class="order-total">
+                            <span>Total:</span>
+                            <span>€${calculateTotal().toFixed(2)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="checkout-buttons">
+                        <button class="btn btn-secondary" onclick="showPage('games')">Seguir Comprando</button>
+                        <button class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                    </div>
+                </div>
+                
+                <!-- Paso 2: Información del cliente -->
+                <div class="checkout-section ${currentStep === 2 ? 'active' : ''}" id="step2">
+                    <div class="checkout-form">
+                        <h3 style="margin-bottom: 20px;">Información de contacto</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="checkout-email">Correo electrónico</label>
+                            <input type="email" id="checkout-email" class="form-input" placeholder="tu@email.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="checkout-phone">Teléfono</label>
+                            <input type="tel" id="checkout-phone" class="form-input" placeholder="+34 123 456 789" required>
+                        </div>
+                    </div>
+                    
+                    <div class="checkout-buttons">
+                        <button class="btn btn-secondary" onclick="prevStep()">Atrás</button>
+                        <button class="btn btn-primary" onclick="nextStep()">Continuar al Pago</button>
+                    </div>
+                </div>
+                
+                <!-- Paso 3: Método de pago -->
+                <div class="checkout-section ${currentStep === 3 ? 'active' : ''}" id="step3">
+                    <div class="checkout-form">
+                        <h3 style="margin-bottom: 20px;">Método de pago</h3>
+                        
+                        <div class="payment-methods">
+                            <div class="payment-method ${selectedPaymentMethod === 'credit' ? 'selected' : ''}" onclick="selectPaymentMethod('credit')">
+                                <i class="far fa-credit-card"></i>
+                                <div>Tarjeta de Crédito</div>
+                            </div>
+                            <div class="payment-method ${selectedPaymentMethod === 'paypal' ? 'selected' : ''}" onclick="selectPaymentMethod('paypal')">
+                                <i class="fab fa-paypal"></i>
+                                <div>PayPal</div>
+                            </div>
+                            <div class="payment-method ${selectedPaymentMethod === 'transfer' ? 'selected' : ''}" onclick="selectPaymentMethod('transfer')">
+                                <i class="fas fa-university"></i>
+                                <div>Transferencia</div>
+                            </div>
+                        </div>
+                        
+                        ${selectedPaymentMethod === 'credit' ? `
+                            <div style="margin-top: 20px;">
+                                <div class="form-group">
+                                    <label class="form-label" for="card-number">Número de tarjeta</label>
+                                    <input type="text" id="card-number" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="card-expiry">Fecha de expiración</label>
+                                        <input type="text" id="card-expiry" class="form-input" placeholder="MM/AA" maxlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="card-cvc">CVC</label>
+                                        <input type="text" id="card-cvc" class="form-input" placeholder="123" maxlength="3">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="card-name">Nombre en la tarjeta</label>
+                                    <input type="text" id="card-name" class="form-input" placeholder="Juan Pérez">
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        ${selectedPaymentMethod === 'paypal' ? `
+                            <div style="text-align: center; margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                <p>Serás redirigido a PayPal para completar tu pago de forma segura.</p>
+                            </div>
+                        ` : ''}
+                        
+                        ${selectedPaymentMethod === 'transfer' ? `
+                            <div style="text-align: center; margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                                <p>Después de confirmar tu pedido, te proporcionaremos los datos bancarios para realizar la transferencia.</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="checkout-buttons">
+                        <button class="btn btn-secondary" onclick="prevStep()">Atrás</button>
+                        <button class="btn btn-primary" onclick="processPayment()" ${!selectedPaymentMethod ? 'disabled' : ''}>Realizar Pago</button>
+                    </div>
+                </div>
+                
+                <!-- Paso 4: Confirmación -->
+                <div class="checkout-section ${currentStep === 4 ? 'active' : ''}" id="step4">
+                    <div class="confirmation-message">
+                        <div class="confirmation-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2 class="confirmation-title">¡Pedido Confirmado!</h2>
+                        <p>Gracias por tu compra. Tu pedido ha sido procesado correctamente.</p>
+                        
+                        <div class="confirmation-details">
+                            <h3>Detalles del pedido</h3>
+                            <div class="confirmation-item">
+                                <span>Número de pedido:</span>
+                                <span>#${generateOrderNumber()}</span>
+                            </div>
+                            <div class="confirmation-item">
+                                <span>Fecha:</span>
+                                <span>${new Date().toLocaleDateString()}</span>
+                            </div>
+                            <div class="confirmation-item">
+                                <span>Total:</span>
+                                <span>€${calculateTotal().toFixed(2)}</span>
+                            </div>
+                            <div class="confirmation-item">
+                                <span>Método de pago:</span>
+                                <span>${getPaymentMethodName()}</span>
+                            </div>
+                        </div>
+                        
+                        <p>Recibirás un correo electrónico con los detalles de tu compra y las instrucciones para descargar tus juegos.</p>
+                    </div>
+                    
+                    <div class="checkout-buttons">
+                        <button class="btn btn-success" onclick="finishCheckout()">Finalizar</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Calcular total del carrito
+        function calculateTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        }
+        
+        // Avanzar al siguiente paso del checkout
+        function nextStep() {
+            if (currentStep < 4) {
+                currentStep++;
+                loadCart();
+            }
+        }
+        
+        // Volver al paso anterior del checkout
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                loadCart();
+            }
+        }
+        
+        // Seleccionar método de pago
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            loadCart();
+        }
+        
+        // Procesar pago
+        function processPayment() {
+            if (!selectedPaymentMethod) {
+                alert('Por favor, selecciona un método de pago');
+                return;
+            }
+            
+            // Simular procesamiento de pago
+            setTimeout(() => {
+                nextStep();
+            }, 1500);
+        }
+        
+        // Finalizar checkout
+        function finishCheckout() {
+            // Limpiar carrito
+            cart = [];
+            currentStep = 1;
+            selectedPaymentMethod = '';
+            
+            // Volver a la página de inicio
+            showPage('home');
+            
+            // Mostrar mensaje de agradecimiento
+            alert('¡Gracias por tu compra! Tus juegos estarán disponibles en tu biblioteca.');
+        }
+        
+        // Generar número de pedido aleatorio
+        function generateOrderNumber() {
+            return Math.floor(100000 + Math.random() * 900000);
+        }
+        
+        // Obtener nombre del método de pago
+        function getPaymentMethodName() {
+            switch(selectedPaymentMethod) {
+                case 'credit': return 'Tarjeta de Crédito';
+                case 'paypal': return 'PayPal';
+                case 'transfer': return 'Transferencia Bancaria';
+                default: return 'No especificado';
+            }
+        }
+        
+        // Iniciar sesión
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                alert('Por favor, completa todos los campos');
+                return;
+            }
+            
+            alert(`Inicio de sesión exitoso para ${email}`);
+            showPage('home');
+        }
+        
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFeaturedGames();
+            loadDealGames();
+            loadNewGames();
+            updateCartCount();
+            
+            // Configurar la búsqueda
+            const searchButton = document.querySelector('.search-bar button');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            searchButton.addEventListener('click', function() {
+                if (searchInput.value.trim() !== '') {
+                    alert('Buscando: ' + searchInput.value);
+                    // En una implementación real, aquí redirigiríamos a la página de resultados
+                }
+            });
+            
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
